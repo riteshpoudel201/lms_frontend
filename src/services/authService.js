@@ -7,6 +7,19 @@ export const registerNewUser = async (user) => {
     url: `${apiUrl}/register`,
     method: "post",
     data: user,
+    showToast:true,
   });
   return response;
 };
+
+export const activateNewUser = async ({sessionId, t}) => {
+  const response = await await apiProcessor({
+    url: `${apiUrl}/activate-user`,
+    method: "post",
+    data: {
+      sessionId,
+      t
+    },
+  });
+  return response;
+}
