@@ -1,19 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SpinnerLoader from "../../components/common/Spinner";
-import { useSearchParams } from "react-router-dom";
-import { Alert } from "react-bootstrap";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Alert, Button } from "react-bootstrap";
 import { activateNewUser } from "../../services/authService";
 
 const VerifyUser = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [response, setResponse] = useState({});
+  const nav = useNavigate();
   const [params] = useSearchParams();
   const sessionId = params.get("sessionId");
   const t = params.get("t");
 
+  const shouldFetchRef = useRef(true);
   useEffect(() => {
-    const activate = activateNewUser({ sessionId, t});
-  }, [sessionId, t]);
+    const activateUser = async () => {
+      const result = await activateNewUser({ sessionId, t });
+      setResponse(result.data);
+      setIsLoading(false);
+      if (result.status === "success") {
+        nav("/signin");
+      }
+    };
+    if (sessionId && t && shouldFetchRef.current) {
+      activateUser();
+    }
+    shouldFetchRef.current = false;
+  }, [sessionId, t, nav]);
   return (
     <>
       {isLoading && (
@@ -25,10 +38,15 @@ const VerifyUser = () => {
           <div>Please don&apos;t go back or refresh the page.</div>
         </div>
       )}
-      {!isLoading && (
+      {response.message && (
         <Alert variant={response.status === "success" ? "success" : "danger"}>
           {response.message || "Some error occured."}
         </Alert>
+      )}
+      {response.message === "success" && (
+        <Link to="/signin">
+          <Button variant="success">Go to login</Button>
+        </Link>
       )}
     </>
   );
