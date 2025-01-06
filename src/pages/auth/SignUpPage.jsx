@@ -1,9 +1,12 @@
-// import UserForm from "../../components/UserForm"
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import CustomInput from "../../components/common/CustomInput";
 import useForm from "../../hooks/useForm";
 import { registerNewUser } from "../../services/authService";
+import { useEffect, useState } from "react";
+import { validator } from "../../utils/validatePassword";
+import { useNavigate } from "react-router-dom";
 const formFields = [
   {
     name: "firstName",
@@ -28,7 +31,7 @@ const formFields = [
     name: "phone",
     type: "Number",
     label: "Phone",
-    placeholder: "Enter your email address..",
+    placeholder: "Enter your phone number..",
     required: false,
   },
   {
@@ -48,6 +51,8 @@ const formFields = [
 ];
 const SignUpPage = () => {
   const { data, handleChange, isLoading, setIsLoading } = useForm({});
+  const [passwordErrors, setPasswordErrors] = useState();
+const nav = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -58,6 +63,10 @@ const SignUpPage = () => {
       return;
     }
     const result = await registerNewUser(data);
+    if (result.data.status === "success") {
+      setIsLoading(false);
+      nav("/signin")
+    }
     console.log(result);
     setTimeout(() => {
       setIsLoading(false);
@@ -65,6 +74,21 @@ const SignUpPage = () => {
 
     // setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (!data) return;
+    // Only run validation if both password and confirmPassword exist
+    if (data.password && data.confirmPassword) {
+      const errors = validator(data.password, data.confirmPassword);
+      if (errors && errors.length > 0) {
+        setPasswordErrors(errors);
+      } else {
+        setPasswordErrors(); // Clear errors if there are no validation issues
+      }
+    }
+  }, [data?.password, data?.confirmPassword]);
+
+  console.log(passwordErrors);
   return (
     <div
       className="card shadow-lg py-3 px-5 mt-5 mb-3 d-flex justify-content-center align-items-center"
@@ -89,6 +113,20 @@ const SignUpPage = () => {
         >
           {isLoading ? "Submitting..." : "Submit"}
         </Button>
+        {passwordErrors && (
+          <ul
+            className="text-danger"
+            style={{
+              border: "1px solid red",
+              borderRadius: "8px",
+              marginTop: "1rem",
+            }}
+          >
+            {passwordErrors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        )}
       </Form>
     </div>
   );
