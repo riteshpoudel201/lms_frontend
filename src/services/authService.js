@@ -23,3 +23,15 @@ export const activateNewUser = async ({sessionId, t}) => {
   });
   return response;
 }
+export const signInUser = async ({email, password}) => {
+  const response = await await apiProcessor({
+    url: `${apiUrl}/login`,
+    method: "post",
+    data: {
+      email,
+      password
+    },
+    showToast:true,
+  });
+  return response;
+}
