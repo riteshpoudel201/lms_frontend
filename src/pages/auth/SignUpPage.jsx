@@ -52,7 +52,7 @@ const formFields = [
 const SignUpPage = () => {
   const [passwordErrors, setPasswordErrors] = useState();
 
-  const { data, handleChange, isLoading, setIsLoading } = useForm({});
+  const { formData, handleChange, isLoading, setIsLoading } = useForm({});
 
   const nav = useNavigate();
 
@@ -60,7 +60,7 @@ const SignUpPage = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const { confirmPassword, ...rest } = data;
+    const { confirmPassword, ...rest } = formData;
     if (confirmPassword !== rest.password) {
       alert("Password not matching.");
       setIsLoading(false);
@@ -68,11 +68,11 @@ const SignUpPage = () => {
     }
 
     const result = await registerNewUser({ ...rest });
-    if (result.data.status === "success") {
+    if (result.formData.status === "success") {
       setIsLoading(false);
       nav("/signin");
     }
-    if (result.data.status === "error") {
+    if (result.formData.status === "error") {
       setIsLoading(false);
     }
 
@@ -87,17 +87,17 @@ const SignUpPage = () => {
 
   useEffect(() => {
     
-    if (!data) return;
+    if (!formData) return;
     
-    if (data.password && data.confirmPassword) {
-      const errors = validator(data.password, data.confirmPassword);
+    if (formData.password && formData.confirmPassword) {
+      const errors = validator(formData.password, formData.confirmPassword);
       if (errors && errors.length > 0) {
         setPasswordErrors(errors);
       } else {
         setPasswordErrors(); 
       }
     }
-  }, [data?.password, data?.confirmPassword]);
+  }, [formData?.password, formData?.confirmPassword]);
 
   console.log(passwordErrors);
   return (
