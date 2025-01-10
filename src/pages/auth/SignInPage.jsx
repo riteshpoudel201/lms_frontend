@@ -2,10 +2,12 @@ import { Button, Card, Form } from "react-bootstrap";
 import CustomInput from "@components/common/CustomInput";
 import useForm from "@hooks/useForm";
 import { signInUser } from "../../services/authService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   const { formData, handleChange, isLoading, setIsLoading } = useForm({});
+
+  const nav = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +18,8 @@ const SignInPage = () => {
       const { accessJwt, refreshJwt } = data;
       sessionStorage.setItem("accessToken", accessJwt);
       localStorage.setItem("refreshToken", refreshJwt);
-      
+      nav("/user");
+      setIsLoading(false);
     }
 
     setIsLoading(false);
