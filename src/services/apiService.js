@@ -20,7 +20,7 @@ export const apiProcessor = async ({
       });
       const response = await pendingReponse;
       toast[response?.data?.status](response?.data?.message);
-      return response;
+      return response.data || response;
     } else {
       const response = await axios({
         url,
@@ -28,7 +28,7 @@ export const apiProcessor = async ({
         data,
         headers,
       });
-      return response;
+      return response.data || response;
     }
   } catch (error) {
     const message = error.response.data.message || error.message;

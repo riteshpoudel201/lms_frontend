@@ -1,12 +1,9 @@
 /* eslint-disable react/prop-types */
 import Form from "react-bootstrap/Form";
 import { EyeIcon } from "lucide-react";
-import { useState } from "react";
-const CustomInput = ({ label, name, text, required, type, ...rest }) => {
-  const [inputType, setType] = useState(type);
-  const handleEyeClick = () => {
-    setType("text");
-  };
+import React, { useState } from "react";
+const CustomInput = ({ label, name, text, required, type, ...rest }, ref) => {
+  const [toggle, setToggle] = useState(false);
   return (
     <Form.Group className="mb-3" controlId={name}>
       <Form.Label className="fs-6">
@@ -15,14 +12,15 @@ const CustomInput = ({ label, name, text, required, type, ...rest }) => {
       </Form.Label>
       <div style={{ position: "relative" }}>
         <Form.Control
-          type={inputType}
+          type={toggle ? "text" : type}
           name={name}
+          ref={ref}
           required={required}
           {...rest}
         />
         {type === "password" && (
           <EyeIcon
-            onClick={handleEyeClick}
+            onClick={()=> setToggle(prev => !prev)}
             style={{
               position: "absolute",
               zIndex: "10",
@@ -38,4 +36,4 @@ const CustomInput = ({ label, name, text, required, type, ...rest }) => {
   );
 };
 
-export default CustomInput;
+export default React.forwardRef(CustomInput);
