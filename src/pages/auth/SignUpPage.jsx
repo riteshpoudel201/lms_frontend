@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import CustomInput from "../../components/common/CustomInput";
-import useForm from "../../hooks/useForm";
-import { registerNewUser } from "../../services/authService";
+import CustomInput from "@components/common/CustomInput";
+import useForm from "@hooks/useForm";
+import { registerNewUser } from "@services/authService";
 import { useEffect, useState } from "react";
 import { validator } from "../../utils/validatePassword";
 import { useNavigate } from "react-router-dom";
