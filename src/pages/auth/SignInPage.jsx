@@ -1,38 +1,65 @@
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form, Spinner } from "react-bootstrap";
 import CustomInput from "@components/common/CustomInput";
 import useForm from "@hooks/useForm";
-import { signInUser } from "../../services/authService";
+import { signInUser } from "@services/authService";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserAction } from "../../features/users/userAction";
-import { useEffect } from "react";
+import {
+  autoLoginUser,
+  fetchUserAction,
+} from "../../features/users/userAction";
+import { useEffect, useState } from "react";
 
 const SignInPage = () => {
   const { formData, handleChange, isLoading, setIsLoading } = useForm({});
+  const [showSpinner, setShowSpinner] = useState(true);
 
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state)=> state.userInfo);
 
-  useEffect(()=>{
-    user?._id && nav("/user");
-  },[user?._id,nav])
+  const { user } = useSelector((state) => state.userInfo);
+
+  useEffect(() => {
+    const hasToken =
+      sessionStorage.getItem("accessToken") || localStorage.getItem("refreshToken");
+
+    if (hasToken) {
+      dispatch(autoLoginUser());
+    }
+    
+    const timer = setTimeout(() => setShowSpinner(false), 2000);
+    return () => clearTimeout(timer); // Clean up the timer on component unmount
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user?._id) {
+      nav("/user");
+    }
+  }, [user?._id, nav]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const { status, data } = await signInUser(formData);
-    // console.log(result);
     if (status === "success") {
       const { accessJwt, refreshJwt } = data;
       sessionStorage.setItem("accessToken", accessJwt);
       localStorage.setItem("refreshToken", refreshJwt);
       dispatch(fetchUserAction());
-      setIsLoading(false);
     }
-
     setIsLoading(false);
   };
+
+  if (showSpinner) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
   return (
     <div
       className="bg-primary d-flex justify-content-center align-items-center"
