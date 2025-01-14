@@ -4,17 +4,23 @@ import { toast } from "react-toastify";
 const getAccessJwt = () => {
   return sessionStorage.getItem("accessToken");
 };
+const getRefreshJwt = () => {
+  return localStorage.getItem("refreshToken");
+};
 export const apiProcessor = async ({
   url,
   method,
   data = {},
   isPrivate = false,
   showToast = false,
+  isRefreshJwt= false,
 }) => {
   const headers = {};
   if (isPrivate) {
-    headers.authorization = `Bearer ${getAccessJwt()}`;
+    const token = isRefreshJwt ? getRefreshJwt() : getAccessJwt();
+    headers.authorization = `Bearer ${token}`;
   }
+  
   try {
     if (showToast) {
       const pendingReponse = axios({
@@ -22,6 +28,8 @@ export const apiProcessor = async ({
         method,
         data,
         headers,
+      },{
+        timeout:1000,
       });
       toast.promise(pendingReponse, {
         pending: "Please wait...",
