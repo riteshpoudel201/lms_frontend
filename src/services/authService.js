@@ -35,3 +35,22 @@ export const signInUser = async ({email, password}) => {
   });
   return response;
 }
+
+export const renewUserToken = async () => {
+  const response = await  apiProcessor({
+    url: `${apiUrl}/renew-jwt`,
+    method: "get",
+    isPrivate:true,
+    isRefreshJwt:true,
+  });
+  return response;
+}
+
+export const signOutUser = async () => {
+  const response = await await apiProcessor({
+    url: `${apiUrl}/logout`,
+    method: "get",
+    isPrivate:true,
+  });
+  return response;
+}

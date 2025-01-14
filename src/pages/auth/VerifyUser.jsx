@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import SpinnerLoader from "../../components/common/Spinner";
+import SpinnerLoader from "@components/common/Spinner";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Alert, Button } from "react-bootstrap";
-import { activateNewUser } from "../../services/authService";
+import { activateNewUser } from "@services/authService";
 
 const VerifyUser = () => {
   const [isLoading, setIsLoading] = useState(true);
