@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import {
   HomePage,
   DashboardPage,
@@ -16,7 +16,9 @@ import {
 } from "@pages";
 import DefaultLayout from "@components/layouts/DefaultLayout";
 import UserLayout from "@components/layouts/UserLayout";
-import VerifyUser from "../pages/auth/VerifyUser";
+import VerifyUser from "@pages/auth/VerifyUser";
+import RequestOtpForm from "@components/forget-password/RequestOtpForm";
+import ResetPasswordForm from "@components/forget-password/ResetPasswordForm";
 
 const AppRoutes = () => {
   return (
@@ -26,7 +28,11 @@ const AppRoutes = () => {
         <Route index element={<HomePage />} />
         <Route path="signin" element={<SignInPage />} />
         <Route path="signup" element={<SignUpPage />} />
-        <Route path="forget" element={<ForgetPassword />} />
+        <Route path="/password" element={<ForgetPassword />}>
+          <Route index element={<Navigate to="/password/request-otp" />} />
+          <Route path="request-otp" element={<RequestOtpForm />} />
+          <Route path="reset" element={<ResetPasswordForm />} />
+        </Route>
         <Route path="activate-user" element={<VerifyUser />} />
       </Route>
 
