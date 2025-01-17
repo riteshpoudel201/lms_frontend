@@ -104,7 +104,7 @@ const SignInPage = () => {
           </Form>
           <Card.Footer>
             <p>
-              Forget password? <Link to="/forget">Reset Now</Link>
+              Forget password? <Link to="/password">Reset Now</Link>
             </p>
           </Card.Footer>
         </Card.Body>
