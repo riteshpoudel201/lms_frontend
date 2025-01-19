@@ -54,3 +54,22 @@ export const signOutUser = async () => {
   });
   return response;
 }
+
+export const requestOTP = async (email) => {
+  const response = await await apiProcessor({
+    url: `${apiUrl}/request-otp`,
+    method: "post",
+    data:{email}
+  });
+  return response;
+}
+
+
+export const resetUserPassword = async ({otp, password}) => {
+  const response = await await apiProcessor({
+    url: `${apiUrl}/reset-password`,
+    method: "post",
+    data:{ otp, password},
+  });
+  return response;
+}
