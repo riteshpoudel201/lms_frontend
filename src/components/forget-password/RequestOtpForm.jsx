@@ -1,12 +1,29 @@
 import CustomInput from "@components/common/CustomInput";
 import { Button, Form } from "react-bootstrap";
 import useForm from "@hooks/useForm";
+import { requestOTP } from "../../services/authService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 const RequestOtpForm = () => {
   const { formData, handleChange, isLoading, setIsLoading } = useForm({});
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(formData);
+    const pending = requestOTP(formData?.email);
+    toast.promise(pending, {
+      pending: "Requesting otp...",
+    });
+    if (!formData.email) {
+      toast.error("Email is required.");
+      return;
+    }
+    const { status, message } = await pending;
+    toast[status](message);
+    if (status === "success") {
+      navigate("/password/reset");
+    }
     setIsLoading(false);
   };
   return (

@@ -2,17 +2,53 @@
 import { Alert, Button, Form } from "react-bootstrap";
 import CustomInput from "@components/common/CustomInput";
 import useForm from "@hooks/useForm";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { validator } from "../../utils/validatePassword";
+import { resetUserPassword } from "../../services/authService";
+import { toast } from "react-toastify";
 
 const ResetPasswordForm = () => {
   const [passwordErrors, setPasswordErrors] = useState();
   const { formData, handleChange, isLoading, setIsLoading } = useForm({});
-  const handleSubmit = (e) => {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(formData);
+    const pending = resetUserPassword({
+      otp: formData.otp,
+      password: formData?.password,
+    });
+    toast.promise(pending, {
+      pending: "Resetting password...",
+    });
+
+    if (!formData.otp) {
+      toast.error("OTP must be provided");
+      return;
+    }
+    if (!formData.password) {
+      toast.error("Password must be provided");
+      return;
+    }
+    if (!formData.confirmPassword) {
+      toast.error("Confirm password is required.");
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password not matching.");
+      return;
+    }
+
+    const { status, message } = await pending;
+
+    toast[status](message);
+    if (status === "success") {
+      setIsLoading(false);
+      navigate("/signin");
+    }
     setIsLoading(false);
   };
 
@@ -39,7 +75,7 @@ const ResetPasswordForm = () => {
         <CustomInput
           name="otp"
           label="OTP"
-          type="email"
+          type="text"
           placeholder="Enter OTP..."
           onChange={handleChange}
           required
