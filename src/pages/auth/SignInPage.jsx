@@ -4,6 +4,7 @@ import useForm from "@hooks/useForm";
 import { signInUser } from "@services/authService";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   autoLoginUser,
   fetchUserAction,
@@ -14,6 +15,7 @@ const SignInPage = () => {
   const { formData, handleChange, isLoading, setIsLoading } = useForm({});
   const [showSpinner, setShowSpinner] = useState(true);
 
+  const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
 
@@ -31,11 +33,12 @@ const SignInPage = () => {
     return () => clearTimeout(timer); // Clean up the timer on component unmount
   }, [dispatch]);
 
+  const path = location?.state?.from ?? "/user"
   useEffect(() => {
     if (user?._id) {
-      nav("/user");
+      nav(path);
     }
-  }, [user?._id, nav]);
+  }, [user?._id, nav, path]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
