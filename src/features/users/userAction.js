@@ -19,7 +19,6 @@ export const autoLoginUser =  () => async (dispatch) => {
   const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken) {
     const result = await renewUserToken();
-    console.log(result);
     
     if(result?.data){
       sessionStorage.setItem("accessToken", result?.data);
