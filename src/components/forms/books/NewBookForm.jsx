@@ -13,9 +13,7 @@ const NewBookForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(formData);
     const response = await dispatch(postNewBookAction(formData));
-    console.log(response);
     setIsLoading(false);
   };
   return (

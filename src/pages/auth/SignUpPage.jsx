@@ -76,13 +76,11 @@ const SignUpPage = () => {
       setIsLoading(false);
     }
 
-    console.log(result);
 
     setTimeout(() => {
       setIsLoading(false);
     }, 1500);
 
-    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -99,7 +97,6 @@ const SignUpPage = () => {
     }
   }, [formData?.password, formData?.confirmPassword]);
 
-  console.log(passwordErrors);
   return (
     <div
       className="card shadow-lg py-3 px-5 mt-5 mb-3 d-flex justify-content-center align-items-center"

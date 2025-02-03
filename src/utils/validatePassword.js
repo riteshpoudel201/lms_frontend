@@ -10,9 +10,6 @@ Validation Rules:
 
 export const validator = (password="", confirmPassword="") => {
   const error = [];
-  console.log("Password: ", password);
-  console.log("C_Password: ", confirmPassword);
-  console.log("C_Password === password: ", confirmPassword === password);
   password.length < 6 && error.push("At least, 6 characters required");
   !/[A-Z]/.test(password) &&
     error.push("At least a character should be uppercase.");
