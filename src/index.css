@@ -4,5 +4,9 @@
 
 .main{
     min-height: 78.5vh;
+}
+
+.user-main{
+    min-height: 78.5vh;
     width: calc(100% - var(--sidebar-width));
 }

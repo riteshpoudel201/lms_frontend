@@ -15,7 +15,7 @@ const UserLayout = () => {
           <hr />
           <Sidebar />
         </div>
-        <main className="main">
+        <main className="user-main">
           <Outlet />
         </main>
       </div>
