@@ -5,7 +5,7 @@ const apiUrl = import.meta.env.VITE_API_URL+"/books";
 
 export const fetchAllBookApi = async () => {
   const response = await apiProcessor({
-    url: `${apiUrl}/`,
+    url: `${apiUrl}/admin`,
     method: "get",
     showToast:false,
     isPrivate: true,
@@ -15,7 +15,7 @@ export const fetchAllBookApi = async () => {
 
 export const fetchAvailableBookApi = async () => {
   const response = await apiProcessor({
-    url: `${apiUrl}/available`,
+    url: `${apiUrl}`,
     method: "get",
     showToast:false,
     isPrivate: true,
