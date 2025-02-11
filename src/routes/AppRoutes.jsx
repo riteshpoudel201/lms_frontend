@@ -43,7 +43,7 @@ const AppRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="books" element={<Books />} />
         <Route path="new-book" element={<NewBookPage />} />
-        <Route path="edit-book" element={<EditBookPage />} />
+        <Route path="edit-book/:id" element={<EditBookPage />} />
         <Route path="book-landing" element={<BookLandingPage />} />
         <Route path="reviews" element={<ReviewsPage />} />
         <Route path="borrow" element={<BorrowPage />} />
