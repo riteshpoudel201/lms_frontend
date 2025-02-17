@@ -7,21 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Books = () => {
-  const { book } = useSelector((state) => state.bookInfo);
-  const [filterBook, setFilterBook] = useState(book ?? []);
+  const { books } = useSelector((state) => state.bookInfo);
+  const [filterBook, setFilterBook] = useState(books ?? []);
   const dispatch = useDispatch();
 
   const handleSearchChange = (e) => {
     const searchValue = e.target.value.toLowerCase();
-    const filteredBook = book.filter((data) =>
+    const filteredBook = books.filter((data) =>
       data.title.toLowerCase().includes(searchValue)
     );
     setFilterBook(filteredBook);
   };
 
   useEffect(() => {
-    setFilterBook(book);
-  }, [book]);
+    setFilterBook(books);
+  }, [books]);
 
   useEffect(() => {
     dispatch(fetchAllBookAction());
