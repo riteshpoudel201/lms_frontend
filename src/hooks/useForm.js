@@ -5,11 +5,16 @@ const useForm = ({ initialState }) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { checked, name, value } = e.target;
+    if(name === "status"){
+      value = checked ? "active" : "inactive";
+
+    }
     setFormData({ ...formData, [name]: value });
   };
   return {
     formData,
+    setFormData,
     isLoading,
     setIsLoading,
     handleChange
