@@ -33,3 +33,13 @@ export const postNewBookApi = async (payload) => {
   });
   return response;
 };
+export const updateBookApi = async (id,payload) => {
+  const response = await apiProcessor({
+    url: `${apiUrl}/${id}`,
+    method: "put",
+    showToast:true,
+    isPrivate: true,
+    data: payload
+  });
+  return response;
+};

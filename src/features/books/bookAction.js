@@ -1,4 +1,4 @@
-import { fetchAllBookApi, fetchAvailableBookApi, postNewBookApi } from "./bookApi";
+import { fetchAllBookApi, fetchAvailableBookApi, postNewBookApi, updateBookApi } from "./bookApi";
 import { setBooks } from "./bookSlice";
 
 
@@ -21,6 +21,13 @@ export const fetchAvailableBookAction = () => async (dispatch) => {
 export const postNewBookAction = (payload) => async (dispatch) => {
   // call api
   const { status, data } = await postNewBookApi(payload);
+  //receive book
+  // dispatch book to redux store
+  status === "success" && data?._id && dispatch(setBooks(data));
+};
+export const updateBookAction = (payload,id) => async (dispatch) => {
+  // call api
+  const { status, data } = await updateBookApi(id,payload);
   //receive book
   // dispatch book to redux store
   status === "success" && data?._id && dispatch(setBooks(data));
