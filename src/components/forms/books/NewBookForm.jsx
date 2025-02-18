@@ -1,7 +1,7 @@
 import CustomInput from "@components/common/CustomInput";
 import useForm from "@hooks/useForm";
 import { Button, Form } from "react-bootstrap";
-import { bookFields } from "@/assets/custom-inputs/bookInputs";
+import { newFormBookFields } from "@/assets/custom-inputs/bookInputs";
 import { postNewBookAction } from "@features/books/bookAction";
 import { useDispatch } from "react-redux";
 
@@ -18,8 +18,8 @@ const NewBookForm = () => {
   };
   return (
     <Form onSubmit={handleSubmit}>
-      {bookFields &&
-        bookFields.map((field) => (
+      {newFormBookFields &&
+        newFormBookFields.map((field) => (
           <CustomInput key={field.name} onChange={handleChange} {...field} />
         ))}
       <div className="d-grid">
