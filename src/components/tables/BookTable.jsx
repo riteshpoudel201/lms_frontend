@@ -11,7 +11,7 @@ function BooksTable({data}) {
           <th>#</th>
           <th>Thumbnail</th>
           <th> Name</th>
-          <th>Is available</th>
+          <th>Availability</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
@@ -29,7 +29,7 @@ function BooksTable({data}) {
             {book?.title} 
           </td>
           <td>
-            {book.available ? "Yes": "No"}
+            {book.available ? "Available": book?.expectedAvailabilityDate ? "From: " + book.expectedAvailabilityDate.slice(0,10): "Not Available"}
           </td>
           <td >
             <p className={`text-white py-1 ${book.status === "active" ? "bg-success rounded-pill":"bg-danger rounded-pill"}`}>
