@@ -17,11 +17,10 @@ export const newFormBookFields = [
       max: new Date().getFullYear(),
     },
     {
-      label: "Image URL",
-      name: "imageURL",
-      type: "url",
+      label: "Image",
+      name: "bookImage",
+      type: "file",
       required: true,
-      placeholder: "Eg: https://www.example.com/images/some-random-pic.jpg"
     },
     {
       label: "ISBN",
