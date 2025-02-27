@@ -13,7 +13,7 @@ const EditBookPage = () => {
     const confirmDialog = confirm("Are you sure to do this?");
     if (!confirmDialog) return;
     dispatch(deleteBookAction(id));
-    navigate("/users/book")
+    navigate("/user/books")
   };
   return (
     <div className="m-2 mx-4">
