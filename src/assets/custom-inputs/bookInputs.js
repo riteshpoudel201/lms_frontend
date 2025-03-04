@@ -81,13 +81,7 @@ export const updateFormBookFields = [
       min:1904,
       max: new Date().getFullYear(),
     },
-    {
-      label: "Image URL",
-      name: "imageURL",
-      type: "url",
-      required: true,
-      placeholder: "Eg: https://www.example.com/images/some-random-pic.jpg"
-    },
+    
     {
       label: "ISBN",
       name: "isbn",
@@ -124,4 +118,5 @@ export const updateFormBookFields = [
       name: "expectedAvailabilityDate",
       type: "date",
     },
+    
   ];
