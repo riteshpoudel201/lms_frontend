@@ -10,3 +10,7 @@
     min-height: 78.5vh;
     width: calc(100% - var(--sidebar-width));
 }
+
+.hover-overlay:hover {
+    opacity: 1 !important;
+  }
