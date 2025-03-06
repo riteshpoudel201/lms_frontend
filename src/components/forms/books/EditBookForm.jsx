@@ -20,6 +20,13 @@ const EditBookForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleRemoveImage = (imageToRemove) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      imageList: prevData.imageList.filter((img) => img !== imageToRemove),
+    }));
+  };
+
   const handleImageChange = (e) => {
     console.log(e.target.files);
     if (e.target.files.length > 2) {
@@ -86,8 +93,6 @@ const EditBookForm = () => {
             {...field}
           />
         ))}
-      
-      
 
       <div className="d-flex flex-column gap-3 w-100 mb-3">
         <h4 className="fw-bold">Available Images:</h4>
@@ -96,34 +101,55 @@ const EditBookForm = () => {
             formData.imageList.map((image) => (
               <div
                 key={image}
-                className="position-relative shadow rounded overflow-hidden"
+                className="position-relative shadow rounded"
                 style={{ width: "220px" }}
               >
-                <div className="position-relative">
+                <div
+                  className="position-relative w-100 rounded"
+                  style={{ height: "200px" }}
+                >
+                  {/* Image */}
                   <img
                     src={`${import.meta.env.VITE_API_BASE_URL}/${image}`}
                     alt="Image Unavailable"
                     className="w-100 h-100 object-fit-cover rounded"
-                    style={{ height: "200px" }}
                   />
-                  <div
-                    className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center opacity-0 hover-overlay"
+
+                  {/* Close button */}
+                  <button
+                    type="button"
+                    className="btn btn-dark position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
                     style={{
-                      background: "rgba(0, 0, 0, 0.5)",
-                      transition: "0.3s",
+                      width: "16px",
+                      height: "24px",
+                      borderRadius: "50%",
+                      zIndex: "10",
+                      color: "white",
+                      fontSize: "16px",
                     }}
+                    onClick={handleRemoveImage}
                   >
-                    <Button variant="light" onClick={() => setThumbnail(image)}>
+                    ×
+                  </button>
+
+                  {/* Hover overlay */}
+                  <div
+                    className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50 opacity-0 hover-overlay transition-opacity"
+                    style={{ transition: "opacity 0.3s ease" }}
+                  >
+                    <button
+                      type="button"
+                      className="btn btn-light"
+                      onClick={() => setThumbnail(image)}
+                    >
                       Set Thumbnail
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
         </div>
       </div>
-
-      
 
       <CustomInput
         label="Upload More (Max 2)"
@@ -135,7 +161,9 @@ const EditBookForm = () => {
       {formData?.imageURL && (
         <div className="m-3">
           <img
-            src={`${import.meta.env.VITE_API_BASE_URL}/${thumbnail || formData?.imageURL}`}
+            src={`${import.meta.env.VITE_API_BASE_URL}/${
+              thumbnail || formData?.imageURL
+            }`}
             alt="Image Unavailable"
             style={{
               height: "100px",
