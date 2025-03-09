@@ -8,23 +8,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { updateBookAction } from "@features/books/bookAction";
+import { toast } from "react-toastify";
 
 const EditBookForm = () => {
   const { formData, setFormData, handleChange, isLoading, setIsLoading } =
     useForm({});
   const { books } = useSelector((state) => state.bookInfo);
   const [image, setImage] = useState(null);
-  const [thumbnail, setThumbnail] = useState(formData?.imageURL ?? "");
+  const [thumbnail, setThumbnail] = useState(formData?.imageURL);
 
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleRemoveImage = (imageToRemove) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      imageList: prevData.imageList.filter((img) => img !== imageToRemove),
-    }));
+    if (!imageToRemove) return;
+
+    // Prevent removing the thumbnail
+    if (imageToRemove === thumbnail) {
+      toast.error(
+        "Could not remove the image as it is the thumbnail of this book."
+      );
+      return;
+    }
+
+    setFormData((prevData) => {
+      const updatedList = prevData.imageList?.filter(
+        (img) => img !== imageToRemove
+      );
+      console.log("Updated imageList:", updatedList); // Debugging log
+
+      return { ...prevData, imageList: updatedList };
+    });
   };
 
   const handleImageChange = (e) => {
@@ -58,8 +73,8 @@ const EditBookForm = () => {
       bookFormData.append(key, rest[key]);
     }
     image?.map((img) => bookFormData.append("bookImage", img));
-    imageList?.map((img) => bookFormData.append("imageList", img));
-    bookFormData.append("imageURL", thumbnail);
+    imageList?.map((img) => bookFormData.append("imageList[]", img));
+    bookFormData.append("imageURL", thumbnail || imageURL);
     dispatch(updateBookAction(bookFormData, bookId));
 
     setIsLoading(false);
@@ -68,12 +83,13 @@ const EditBookForm = () => {
   useEffect(() => {
     if (books?.length > 0 && id !== formData?._id) {
       const selectedBook = books?.find((book) => book._id === id);
-
+      setThumbnail(selectedBook?.imageURL);
       setFormData(selectedBook);
     } else {
       navigate("/user/books");
     }
   }, [id, navigate, setFormData]);
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Check
@@ -127,7 +143,10 @@ const EditBookForm = () => {
                       color: "white",
                       fontSize: "16px",
                     }}
-                    onClick={handleRemoveImage}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent event bubbling
+                      handleRemoveImage(image); // Pass the correct image path
+                    }}
                   >
                     ×
                   </button>
