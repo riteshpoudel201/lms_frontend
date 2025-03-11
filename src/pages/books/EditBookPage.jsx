@@ -24,8 +24,8 @@ const EditBookPage = () => {
         Update Book Details
       </h3>
       <EditBookForm />
-      <div>
-        <Button onClick={handleDeleteButtonClick} variant="outline">
+      <div className="w-100 text-center mt-2">
+        <Button onClick={handleDeleteButtonClick} variant="outline" className="text-danger text-decoration-underline underline-offset-8 p-1" >
           Delete this book
         </Button>
       </div>
