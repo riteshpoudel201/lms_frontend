@@ -2,15 +2,20 @@ import React from 'react'
 import SectionContent from './SectionContent'
 import SectionTitle from './SectionTitle'
 import SectionCard from './SectionCard'
+import SectionContainer from './SectionContainer'
 
 const JustInSection = () => {
   return (
-    <div>
+    <SectionContainer>
       <SectionTitle title="Just In"/>
       <SectionContent>
         <SectionCard />
+        <SectionCard />
+        <SectionCard />
+        <SectionCard />
+        <SectionCard />
       </SectionContent>
-    </div>
+    </SectionContainer>
   )
 }
 
