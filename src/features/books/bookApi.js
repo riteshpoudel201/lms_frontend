@@ -18,7 +18,6 @@ export const fetchAvailableBookApi = async () => {
     url: `${apiUrl}`,
     method: "get",
     showToast:false,
-    isPrivate: true,
   });
   return response;
 };
