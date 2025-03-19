@@ -66,3 +66,20 @@
   }
 
   /* custom scrollbar ends  */
+
+
+  /* book landing page  */
+
+  .book-description {
+    overflow: hidden;
+  }
+  
+  .truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+  
+  /* book landing page ends  */
