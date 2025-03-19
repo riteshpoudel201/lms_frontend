@@ -26,6 +26,7 @@ const AppRoutes = () => {
       {/* public routes  */}
       <Route path="/" element={<DefaultLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="book/:slug" element={<BookLandingPage />} />
         <Route path="signin" element={<SignInPage />} />
         <Route path="signup" element={<SignUpPage />} />
         <Route path="/password" element={<ForgetPassword />}>
@@ -34,6 +35,7 @@ const AppRoutes = () => {
           <Route path="reset" element={<ResetPasswordForm />} />
         </Route>
         <Route path="activate-user" element={<VerifyUser />} />
+        <Route path="*" element={<div style={{width:"100%", height:"78.5vh",display:"flex", alignItems:"center",justifyContent:"center"}}><h1>404 - Page Not Found</h1></div>} />
       </Route>
 
       {/* private routes  */}
@@ -44,7 +46,6 @@ const AppRoutes = () => {
         <Route path="books" element={<Books />} />
         <Route path="new-book" element={<NewBookPage />} />
         <Route path="edit-book/:id" element={<EditBookPage />} />
-        <Route path="book-landing" element={<BookLandingPage />} />
         <Route path="reviews" element={<ReviewsPage />} />
         <Route path="borrow" element={<BorrowPage />} />
       </Route>
