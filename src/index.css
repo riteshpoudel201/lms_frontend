@@ -83,3 +83,24 @@
   }
   
   /* book landing page ends  */
+
+
+  /* breadcrumb styling  */
+  .breadcrumb {
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  .breadcrumb a {
+    text-decoration: none;
+    color: blue;
+  }
+  
+  .breadcrumb span {
+    margin: 0 5px;
+  }
+
+  .breadcrumb .breadcrumb-item+.breadcrumb-item::before{
+    content: " > ";
+  }
+  /* breadcrumb styling ends  */

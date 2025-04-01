@@ -1,3 +1,4 @@
+import BreadcrumbComponent from "@components/common/Breadcrumb";
 import { useState, useEffect, useRef } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -24,6 +25,7 @@ const BookLandingPage = () => {
   return (
     <Container className="mt-2">
       <Row>
+        <BreadcrumbComponent />
         <Col md={4}>
           <img src={book.imageURL} alt={book.title} className="img-fluid" />
         </Col>

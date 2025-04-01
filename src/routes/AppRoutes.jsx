@@ -19,38 +19,81 @@ import UserLayout from "@components/layouts/UserLayout";
 import VerifyUser from "@pages/auth/VerifyUser";
 import RequestOtpForm from "@components/forget-password/RequestOtpForm";
 import ResetPasswordForm from "@components/forget-password/ResetPasswordForm";
+import BookListPage from "@pages/books/BookListPage";
+
+export const availableRoutes = [
+  { path: "/", breadcrumb: "Home" },
+  { path: "/book", breadcrumb: "Book" },
+  { path: "/book/:slug", breadcrumb: "Book Details" },
+  { path: "/signin", breadcrumb: "Sign In" },
+  { path: "/signup", breadcrumb: "Sign Up" },
+  { path: "/password/request-otp", breadcrumb: "Request OTP" },
+  { path: "/password/reset", breadcrumb: "Reset Password" },
+  { path: "/activate-user", breadcrumb: "Verify User" },
+  { path: "/user", breadcrumb: "User" },
+  { path: "/user/users", breadcrumb: "Users" },
+  { path: "/user/profile", breadcrumb: "Profile" },
+  { path: "/user/books", breadcrumb: "Books" },
+  { path: "/user/new-book", breadcrumb: "New Book" },
+  { path: "/user/edit-book/:id", breadcrumb: "Edit Book" },
+  { path: "/user/reviews", breadcrumb: "Reviews" },
+  { path: "/user/borrow", breadcrumb: "Borrow" },
+];
+
+
+// src/routesConfig.ts
+export const routesConfig = [
+  {
+    path: "/",
+    element: <DefaultLayout />,
+    breadcrumb: "Home",
+    children: [
+      { path: "", element: <HomePage />, breadcrumb: "Home" },
+      { path: "book", element: <BookListPage />, breadcrumb: "Book" },
+      { path: "book/:slug", element: <BookLandingPage />, breadcrumb: "Book Details" },
+      { path: "signin", element: <SignInPage />, breadcrumb: "Sign In" },
+      { path: "signup", element: <SignUpPage />, breadcrumb: "Sign Up" },
+      {
+        path: "password",
+        element: <ForgetPassword />,
+        breadcrumb: "Forgot Password",
+        children: [
+          { path: "", element: <Navigate to="/password/request-otp" />, breadcrumb: "Request OTP" },
+          { path: "request-otp", element: <RequestOtpForm />, breadcrumb: "Request OTP" },
+          { path: "reset", element: <ResetPasswordForm />, breadcrumb: "Reset Password" },
+        ],
+      },
+      { path: "activate-user", element: <VerifyUser />, breadcrumb: "Verify User" },
+      { path: "*", element: <div><h1>404 - Page Not Found</h1></div>, breadcrumb: "404" },
+    ],
+  },
+  {
+    path: "/user",
+    element: <UserLayout />,
+    breadcrumb: "User",
+    children: [
+      { path: "", element: <DashboardPage />, breadcrumb: "Dashboard" },
+      { path: "profile", element: <ProfilePage />, breadcrumb: "Profile" },
+      { path: "books", element: <Books />, breadcrumb: "Books" },
+      { path: "new-book", element: <NewBookPage />, breadcrumb: "New Book" },
+      { path: "edit-book/:id", element: <EditBookPage />, breadcrumb: "Edit Book" },
+      { path: "reviews", element: <ReviewsPage />, breadcrumb: "Reviews" },
+      { path: "borrow", element: <BorrowPage />, breadcrumb: "Borrow" },
+    ],
+  },
+];
+
 
 const AppRoutes = () => {
-  return (
-    <Routes>
-      {/* public routes  */}
-      <Route path="/" element={<DefaultLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="book/:slug" element={<BookLandingPage />} />
-        <Route path="signin" element={<SignInPage />} />
-        <Route path="signup" element={<SignUpPage />} />
-        <Route path="/password" element={<ForgetPassword />}>
-          <Route index element={<Navigate to="/password/request-otp" />} />
-          <Route path="request-otp" element={<RequestOtpForm />} />
-          <Route path="reset" element={<ResetPasswordForm />} />
-        </Route>
-        <Route path="activate-user" element={<VerifyUser />} />
-        <Route path="*" element={<div style={{width:"100%", height:"78.5vh",display:"flex", alignItems:"center",justifyContent:"center"}}><h1>404 - Page Not Found</h1></div>} />
+  const renderRoutes = (routes) => {
+    return routes.map(({ path, element, children }) => (
+      <Route key={path} path={path} element={element}>
+        {children && renderRoutes(children)}
       </Route>
+    ));
+  };
 
-      {/* private routes  */}
-      <Route path="/user" element={<UserLayout />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="users" element={<UserPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="books" element={<Books />} />
-        <Route path="new-book" element={<NewBookPage />} />
-        <Route path="edit-book/:id" element={<EditBookPage />} />
-        <Route path="reviews" element={<ReviewsPage />} />
-        <Route path="borrow" element={<BorrowPage />} />
-      </Route>
-    </Routes>
-  );
+  return <Routes>{renderRoutes(routesConfig)}</Routes>;
 };
 
 export default AppRoutes;
