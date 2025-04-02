@@ -22,6 +22,15 @@ export const fetchAvailableBookApi = async () => {
   return response;
 };
 
+export const fetchBookBySlugApi = async (slug) => {
+  const response = await apiProcessor({
+    url: `${apiUrl}/${slug}`,
+    method: "get",
+    showToast:false,
+  });
+  return response;
+};
+
 export const postNewBookApi = async (payload) => {
   const response = await apiProcessor({
     url: `${apiUrl}`,
