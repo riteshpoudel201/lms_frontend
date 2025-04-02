@@ -1,49 +1,103 @@
 import BreadcrumbComponent from "@components/common/Breadcrumb";
+import SpinnerLoader from "@components/common/Spinner";
+import { fetchBookBySlugAction } from "@features/books/bookAction";
 import { useState, useEffect, useRef } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Alert, Button, Col, Container, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const BookLandingPage = () => {
   const { slug } = useParams();
+  const dispatch = useDispatch();
   const { publicBooks } = useSelector((state) => state.bookInfo);
+  const { book } = useSelector((state) => state.bookInfo);
   const [isTruncated, setIsTruncated] = useState(false);
   const descriptionRef = useRef(null);
-
-  const book = publicBooks.find((book) => book.slug === slug);
+  const [bookDetails, setBookDetails] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (descriptionRef.current) {
-      setIsTruncated(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
+      setIsTruncated(
+        descriptionRef.current.scrollHeight >
+          descriptionRef.current.clientHeight
+      );
     }
-  }, [book]); 
+    const selectedBook = publicBooks.find((book) => book.slug === slug);
+    setBookDetails(selectedBook);
 
-  if (!book) {
-    return <h2>Book not found</h2>;
+    //fetching from the server
+    if (!selectedBook) {
+      setLoading(true);
+      dispatch(fetchBookBySlugAction(slug));
+      setBookDetails(book);
+    }
+    setLoading(false);
+
+  }, [book, slug, dispatch, publicBooks]);
+
+  if (loading) {
+    return (
+      <Container
+        fluid
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "75vh" }}
+      >
+        <Row className="w-100">
+          <Col className="d-flex justify-content-center align-items-center">
+            <SpinnerLoader />
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+
+  if (!bookDetails) {
+    return (
+      <Container className="mt-4">
+        <Row>
+          <Col>
+            <Alert variant="danger">
+              Book unavailable. Please contact admin.
+            </Alert>
+          </Col>
+        </Row>
+      </Container>
+    );
   }
 
   return (
     <Container className="mt-2">
       <Row>
-        <BreadcrumbComponent />
+        <BreadcrumbComponent
+          title={
+            bookDetails?.title?.length > 10
+              ? `${bookDetails?.title?.slice(0, 10)}...`
+              : bookDetails?.title
+          }
+        />
         <Col md={4}>
-          <img src={book.imageURL} alt={book.title} className="img-fluid" />
+          <img
+            src={bookDetails?.imageURL}
+            alt={bookDetails?.title}
+            className="img-fluid"
+          />
         </Col>
 
         <Col md={8} className="d-flex flex-column">
           <div className="d-flex flex-column gap-2 flex-grow-1">
-            <h3>{book.title}</h3>
+            <h3>{bookDetails?.title}</h3>
             <b>
-              {book.author} - {book.year}
+              {bookDetails?.author} - {bookDetails?.year}
             </b>
             <span>
-              {book.genre} | {book.averageRating}
+              {bookDetails?.genre} | {bookDetails?.averageRating}
             </span>
             <p
               ref={descriptionRef}
               className={`book-description ${isTruncated ? "truncate" : ""}`}
             >
-              {book.description}
+              {bookDetails?.description}
             </p>
           </div>
           <hr />
