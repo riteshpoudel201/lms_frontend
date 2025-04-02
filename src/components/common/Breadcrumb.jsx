@@ -20,7 +20,7 @@ const matchRoute = (routePath, currentPath) => {
   return true;
 };
 
-const BreadcrumbComponent = () => {
+const BreadcrumbComponent = ({title}) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
@@ -49,7 +49,7 @@ const BreadcrumbComponent = () => {
             active={isLast}
             style={{ display: "flex", alignItems: "center" }}
           >
-            {breadcrumbText}
+            {isLast && title ? title  :breadcrumbText}
           </Breadcrumb.Item>
         );
       })}
