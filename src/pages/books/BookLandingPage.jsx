@@ -2,9 +2,12 @@ import BreadcrumbComponent from "@components/common/Breadcrumb";
 import SpinnerLoader from "@components/common/Spinner";
 import { fetchBookBySlugAction } from "@features/books/bookAction";
 import { useState, useEffect, useRef } from "react";
-import { Alert, Button, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { generateImageUrl } from "@utils/generateUrl";
+import Star from "@components/common/Star";
+import Reviews from "@components/common/Reviews";
 
 const BookLandingPage = () => {
   const { slug } = useParams();
@@ -15,6 +18,7 @@ const BookLandingPage = () => {
   const descriptionRef = useRef(null);
   const [bookDetails, setBookDetails] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -33,7 +37,6 @@ const BookLandingPage = () => {
       setBookDetails(book);
     }
     setLoading(false);
-
   }, [book, slug, dispatch, publicBooks]);
 
   if (loading) {
@@ -66,6 +69,13 @@ const BookLandingPage = () => {
     );
   }
 
+  const imageList = [
+    "https://images.pexels.com/photos/30722562/pexels-photo-30722562/free-photo-of-woman-in-flowing-blue-dress-on-wooden-pier.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "https://images.pexels.com/photos/31326943/pexels-photo-31326943/free-photo-of-modern-architecture-in-tokyo-s-futuristic-odaiba.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "https://images.pexels.com/photos/31246541/pexels-photo-31246541/free-photo-of-beautiful-cherry-blossoms-against-blue-sky.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "https://images.pexels.com/photos/31293426/pexels-photo-31293426/free-photo-of-majestic-snowy-mountain-peaks-in-winter-landscape.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  ];
+
   return (
     <Container className="mt-2">
       <Row>
@@ -76,23 +86,45 @@ const BookLandingPage = () => {
               : bookDetails?.title
           }
         />
-        <Col md={4}>
-          <img
-            src={bookDetails?.imageURL}
-            alt={bookDetails?.title}
-            className="img-fluid"
-          />
+        <Col md={4} className="d-flex flex-column gap-3 overflow-hidden">
+          <Row className="" style={{ height: "400px" }}>
+            <img
+              src={selectedImage || bookDetails?.imageURL}
+              alt={bookDetails?.title}
+              className="img-fluid w-100 h-100"
+              style={{
+                objectFit: "contain",
+                objectPosition: "center",
+              }}
+            />
+          </Row>
+          <Row
+            className=" d-flex flex-row flex-nowrap"
+            style={{ overflow: "auto" }}
+          >
+            {bookDetails?.imageList?.map((image) => (
+              <img
+                src={generateImageUrl(image)}
+                alt="images"
+                className="w-20"
+                style={{ width: "auto", height: "5rem", borderRadius: "5px" }}
+                onClick={() => setSelectedImage(image)}
+              />
+            ))}
+          </Row>
         </Col>
-
         <Col md={8} className="d-flex flex-column">
           <div className="d-flex flex-column gap-2 flex-grow-1">
             <h3>{bookDetails?.title}</h3>
             <b>
               {bookDetails?.author} - {bookDetails?.year}
             </b>
-            <span>
-              {bookDetails?.genre} | {bookDetails?.averageRating}
-            </span>
+            <div className="d-flex flex-row gap-2">
+              <span>{bookDetails?.genre}</span>
+              <Star rating={bookDetails?.averageRating} />
+              <span className="text-secondary">443 reviews</span>
+            </div>
+
             <p
               ref={descriptionRef}
               className={`book-description ${isTruncated ? "truncate" : ""}`}
@@ -107,8 +139,18 @@ const BookLandingPage = () => {
         </Col>
       </Row>
 
-      <Row>
-        <Col>Bottom More Details Section</Col>
+      <Row className="border mt-5 mb-5">
+        <Col className="p-3">
+          <h3 className="margin-auto mt-2 text-center">More Details</h3>
+          <Tabs defaultActiveKey="description" className="mb-3">
+            <Tab eventKey="description" title="Description" >
+              {bookDetails?.description}
+            </Tab>
+            <Tab eventKey="reviews" title="Reviews">
+              <Reviews bookRef={bookDetails?.id}/>
+            </Tab>
+          </Tabs>
+        </Col>
       </Row>
     </Container>
   );
