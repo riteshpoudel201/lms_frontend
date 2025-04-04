@@ -9,6 +9,7 @@
             "@services/*":["src/services/*"],
             "@features/*":["src/features/*"],
             "@redux/*":["src/redux/*"],
+            "@utils/*":["src/utils/*"]
         }
     }
 }
