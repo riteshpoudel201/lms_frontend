@@ -1,6 +1,6 @@
 import { LibraryBig } from "lucide-react";
 import { Container, Form, InputGroup, Nav, Navbar } from "react-bootstrap";
-import { FaHome, FaSignInAlt } from "react-icons/fa";
+import { FaBook, FaHome, FaSignInAlt } from "react-icons/fa";
 import { HiOutlineLogin } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { PiSignOutBold } from "react-icons/pi";
@@ -52,6 +52,10 @@ const Header = () => {
               <NavLink className="nav-link" to="/">
                 <FaHome />
                 Home
+              </NavLink>
+              <NavLink className="nav-link" to="/book">
+                <FaBook />
+                Books
               </NavLink>
               {user._id ? (
                 <>
