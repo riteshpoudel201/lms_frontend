@@ -1,9 +1,9 @@
 import { useLocation, Link } from "react-router-dom";
-import { Breadcrumb } from "react-bootstrap";  
+import { Breadcrumb } from "react-bootstrap";
 import { availableRoutes } from "@/routes/AppRoutes";
 
 const isDynamicParam = (text) => {
-  return /^:/.test(text); 
+  return /^:/.test(text);
 };
 
 const matchRoute = (routePath, currentPath) => {
@@ -20,7 +20,7 @@ const matchRoute = (routePath, currentPath) => {
   return true;
 };
 
-const BreadcrumbComponent = ({title}) => {
+const BreadcrumbComponent = ({ title, query }) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
@@ -33,9 +33,11 @@ const BreadcrumbComponent = ({title}) => {
 
       {pathnames.map((value, index) => {
         const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-        const isLast = index === pathnames.length - 1;
+        const isLast = index === pathnames.length - 1 && !query;
 
-        const matchedRoute = availableRoutes.find(route => matchRoute(route.path, to));
+        const matchedRoute = availableRoutes.find((route) =>
+          matchRoute(route.path, to)
+        );
 
         const breadcrumbText = matchedRoute
           ? matchedRoute.breadcrumb
@@ -44,15 +46,20 @@ const BreadcrumbComponent = ({title}) => {
         return (
           <Breadcrumb.Item
             key={to}
-            linkAs={isLast ? 'span' : Link}
-            linkProps={isLast ? {} : { to }}
+            linkAs={isLast && !query ? "span" : Link}
+            linkProps={isLast && !query ? {} : { to }}
             active={isLast}
             style={{ display: "flex", alignItems: "center" }}
           >
-            {isLast && title ? title  :breadcrumbText}
+            {isLast && title && !query ? title : breadcrumbText}
           </Breadcrumb.Item>
         );
       })}
+      {query && (
+        <Breadcrumb.Item linkAs="span" active={false}>
+          {query}
+        </Breadcrumb.Item>
+      )}
     </Breadcrumb>
   );
 };
