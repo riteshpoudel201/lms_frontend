@@ -8,11 +8,12 @@ import { useParams } from "react-router-dom";
 import { generateImageUrl } from "@utils/generateUrl";
 import Star from "@components/common/Star";
 import Reviews from "@components/common/Reviews";
+import { setCartItems } from "@features/books/bookSlice";
 
 const BookLandingPage = () => {
   const { slug } = useParams();
   const dispatch = useDispatch();
-  const { publicBooks } = useSelector((state) => state.bookInfo);
+  const { publicBooks, cartItems } = useSelector((state) => state.bookInfo);
   const { book } = useSelector((state) => state.bookInfo);
   const [isTruncated, setIsTruncated] = useState(false);
   const descriptionRef = useRef(null);
@@ -38,6 +39,8 @@ const BookLandingPage = () => {
     }
     setLoading(false);
   }, [book, slug, dispatch, publicBooks]);
+
+  const isBookInTheCart = cartItems.some(item => item.id === bookDetails?.id);
 
   if (loading) {
     return (
@@ -133,8 +136,8 @@ const BookLandingPage = () => {
             </p>
           </div>
           <hr />
-          <Button variant="dark" className="mt-auto">
-            Add to Borrowing List
+          <Button variant="dark" className="mt-auto" onClick={()=> dispatch(setCartItems(bookDetails))} disabled={isBookInTheCart}>
+            {isBookInTheCart ? "Already in the cart" : "Add to Borrowing List"}
           </Button>
         </Col>
       </Row>
