@@ -1,6 +1,7 @@
 import { LibraryBig } from "lucide-react";
 import { Container, Form, InputGroup, Nav, Navbar } from "react-bootstrap";
 import { FaBook, FaHome, FaSignInAlt } from "react-icons/fa";
+import { BsCart3 } from "react-icons/bs";
 import { HiOutlineLogin } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { PiSignOutBold } from "react-icons/pi";
@@ -10,6 +11,7 @@ import { signOutUser } from "@services/authService";
 import { toast } from "react-toastify";
 import { setUsers } from "@features/users/userSlice";
 import SearchBar from "./SearchBar";
+import { CartButton } from "./header/CartButton";
 const Header = () => {
   const { user } = useSelector((state) => state.userInfo);
   const dispatch = useDispatch();
@@ -80,6 +82,8 @@ const Header = () => {
                   </NavLink>
                 </>
               )}
+
+              <CartButton />
             </Nav>
           </div>
         </Navbar.Collapse>
@@ -89,3 +93,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
