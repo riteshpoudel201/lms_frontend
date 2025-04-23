@@ -4,6 +4,7 @@ const initialState ={
     books:[],
     publicBooks:[],
     book: {},
+    cartItems: [],
 }
  const bookSlice = createSlice({
     name:"books",
@@ -17,11 +18,14 @@ const initialState ={
         },
         setSingleBook: (state, action) => {
             state.book = action.payload;
+        },
+        setCartItems: (state, action)=>{
+            state.cartItems = [...state.cartItems, action.payload]
         }
     }
 })
 
 const { reducer, actions} = bookSlice;
 
-export const { setBooks, setPublicBooks, setSingleBook } = actions;
+export const { setBooks, setPublicBooks, setSingleBook, setCartItems } = actions;
 export default reducer;
