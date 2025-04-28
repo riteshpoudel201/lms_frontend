@@ -20,6 +20,7 @@ import VerifyUser from "@pages/auth/VerifyUser";
 import RequestOtpForm from "@components/forget-password/RequestOtpForm";
 import ResetPasswordForm from "@components/forget-password/ResetPasswordForm";
 import BookListPage from "@pages/books/BookListPage";
+import CartPage from "@pages/borrow/CartPage";
 
 export const availableRoutes = [
   { path: "/", breadcrumb: "Home" },
@@ -51,6 +52,7 @@ export const routesConfig = [
       { path: "", element: <HomePage />, breadcrumb: "Home" },
       { path: "book", element: <BookListPage />, breadcrumb: "Book" },
       { path: "book/:slug", element: <BookLandingPage />, breadcrumb: "Book Details" },
+      { path: "cart", element: <CartPage />, breadcrumb: "Book Cart" },
       { path: "signin", element: <SignInPage />, breadcrumb: "Sign In" },
       { path: "signup", element: <SignUpPage />, breadcrumb: "Sign Up" },
       {
