@@ -21,11 +21,15 @@ const initialState ={
         },
         setCartItems: (state, action)=>{
             state.cartItems = [...state.cartItems, action.payload]
+        },
+
+        deleteBookFromCart: (state, action) => {
+            state.cartItems = state.cartItems.filter(cart=> cart?._id !== action.payload)
         }
     }
 })
 
 const { reducer, actions} = bookSlice;
 
-export const { setBooks, setPublicBooks, setSingleBook, setCartItems } = actions;
+export const { setBooks, setPublicBooks, setSingleBook, setCartItems ,deleteBookFromCart } = actions;
 export default reducer;
