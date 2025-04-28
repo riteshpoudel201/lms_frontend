@@ -24,7 +24,7 @@ const SectionCard = ({ imageURL, title, author, year, slug }) => {
             {author?.slice(0, 20) + "..." || "No Author"}-{year || "N/A"}
           </CardText>
         </div>
-        <Link to={"book/" + slug}>
+        <Link to={ slug}>
           <Button variant="dark" className="w-100">
             View Details
           </Button>
@@ -60,7 +60,7 @@ export const SectionCardList = ({ imageURL, title, author, year, slug, descripti
               {author?.slice(0, 40) || "No Author"} - {year || "N/A"}
             </CardText>
           </div>
-          <Link to={"book/" + slug}>
+          <Link to={slug}>
             <Button variant="dark" className="w-100">
               View Details
             </Button>
