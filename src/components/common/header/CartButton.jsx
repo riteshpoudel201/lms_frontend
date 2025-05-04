@@ -3,7 +3,7 @@ import  styles from "./cart-button.module.css"
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 export const CartButton = () => {
-  const {cartItems} = useSelector(state=> state.bookInfo)
+  const {cartItems} = useSelector(state=> state.cartInfo)
     return (
       <>
         <Link className="nav-link" style={{position:"relative"}} as="link" to="/cart">
