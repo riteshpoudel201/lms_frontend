@@ -1,24 +1,25 @@
-import { deleteBookFromCart, setCartItems } from "@features/books/bookSlice";
+import { deleteBookFromCart } from "@features/cart/cartSlice";
 import { generateImageUrl } from "@utils/generateUrl";
 import { X } from "lucide-react";
 import { Alert, Button, Container, Row } from "react-bootstrap";
-import { FaXRay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
-  const { cartItems } = useSelector((state) => state.bookInfo);
+  const { cartItems } = useSelector((state) => state.cartInfo);
+
   return (
     <Container>
       <Row>
         <h2 className="py-4">My Borrowing List</h2>
         <div className="d-flex flex-column  gap-4">
           {cartItems &&
-            cartItems?.map((cart) => {
-              return <CartItem item={cart} cartItems={cartItems} />;
+            cartItems?.map((cart, index) => {
+              return <CartItem key={index} item={cart} cartItems={cartItems} />;
             })}
           {cartItems?.length > 0 ? (
-            <Button variant="dark">Login to Burrow || Proceed to Burrow</Button>
+            <BorrowListButton />
           ) : (
             <>
               <Alert className="d-flex justify-content-between align-items-center">
@@ -45,6 +46,7 @@ export default CartPage;
 const CartItem = ({ item, cartItems }) => {
   const dispatch = useDispatch();
   const handleRemoveButtonClick = (id) => {
+    toast("Book removed successfully from the cart.")
     dispatch(deleteBookFromCart(id));
   };
   return (
@@ -63,11 +65,42 @@ const CartItem = ({ item, cartItems }) => {
       </Link>
       <span>Returning: {"2026-01-04"}</span>
       <button
-        style={{ border: "0", outline: "none", background: "none" }}
+        style={{ border: "0", outline: "none", background: "none", color:"red" }}
         onClick={() => handleRemoveButtonClick(item._id)}
       >
-        <X /> {" "} Remove
+        <X /> Remove
       </button>
     </div>
+  );
+};
+
+const BorrowListButton = () => {
+  const { user } = useSelector((state) => state.userInfo);
+  const navigate = useNavigate();
+  const handleBurrowClick = () => {
+    const confirmDialog = confirm("Are you sure to borrow this book?");
+    if (confirmDialog) {
+      //TODO
+      //1. Call api to register the borrowed book.
+      //2. Clear the cart.
+      //3. Redirect to success or error page.
+    }
+  };
+
+  return (
+    <>
+      {user?._id ? (
+        <Button variant="dark" onClick={handleBurrowClick}>
+          Proceed to Borrow
+        </Button>
+      ) : (
+        <Button
+          variant="dark"
+          onClick={() => navigate("/signin", { state: { from: "/cart" } })}
+        >
+          Login to Borrow
+        </Button>
+      )}
+    </>
   );
 };
