@@ -8,18 +8,22 @@ import { useParams } from "react-router-dom";
 import { generateImageUrl } from "@utils/generateUrl";
 import Star from "@components/common/Star";
 import Reviews from "@components/common/Reviews";
-import { setCartItems } from "@features/books/bookSlice";
+import { setCartItems } from "@features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 const BookLandingPage = () => {
   const { slug } = useParams();
   const dispatch = useDispatch();
-  const { publicBooks, cartItems } = useSelector((state) => state.bookInfo);
+  const { publicBooks } = useSelector((state) => state.bookInfo);
+  const { cartItems } = useSelector((state) => state.cartInfo);
   const { book } = useSelector((state) => state.bookInfo);
   const [isTruncated, setIsTruncated] = useState(false);
   const descriptionRef = useRef(null);
   const [bookDetails, setBookDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState("");
+
+  const isBookInTheCart = cartItems.some((item) => item._id === bookDetails?._id);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -28,6 +32,7 @@ const BookLandingPage = () => {
           descriptionRef.current.clientHeight
       );
     }
+
     const selectedBook = publicBooks.find((book) => book.slug === slug);
     setBookDetails(selectedBook);
 
@@ -37,10 +42,9 @@ const BookLandingPage = () => {
       dispatch(fetchBookBySlugAction(slug));
       setBookDetails(book);
     }
+
     setLoading(false);
   }, [book, slug, dispatch, publicBooks]);
-
-  const isBookInTheCart = cartItems.some(item => item.id === bookDetails?.id);
 
   if (loading) {
     return (
@@ -72,13 +76,6 @@ const BookLandingPage = () => {
     );
   }
 
-  const imageList = [
-    "https://images.pexels.com/photos/30722562/pexels-photo-30722562/free-photo-of-woman-in-flowing-blue-dress-on-wooden-pier.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "https://images.pexels.com/photos/31326943/pexels-photo-31326943/free-photo-of-modern-architecture-in-tokyo-s-futuristic-odaiba.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "https://images.pexels.com/photos/31246541/pexels-photo-31246541/free-photo-of-beautiful-cherry-blossoms-against-blue-sky.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "https://images.pexels.com/photos/31293426/pexels-photo-31293426/free-photo-of-majestic-snowy-mountain-peaks-in-winter-landscape.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  ];
-
   return (
     <Container className="mt-2">
       <Row>
@@ -107,6 +104,7 @@ const BookLandingPage = () => {
           >
             {bookDetails?.imageList?.map((image) => (
               <img
+                key={image}
                 src={generateImageUrl(image)}
                 alt="images"
                 className="w-20"
@@ -136,7 +134,15 @@ const BookLandingPage = () => {
             </p>
           </div>
           <hr />
-          <Button variant="dark" className="mt-auto" onClick={()=> dispatch(setCartItems(bookDetails))} disabled={isBookInTheCart}>
+          <Button
+            variant="dark"
+            className="mt-auto"
+            onClick={() => {
+              toast("Book added to the cart.");
+              dispatch(setCartItems(bookDetails));
+            }}
+            disabled={isBookInTheCart}
+          >
             {isBookInTheCart ? "Already in the cart" : "Add to Borrowing List"}
           </Button>
         </Col>
@@ -146,11 +152,11 @@ const BookLandingPage = () => {
         <Col className="p-3">
           <h3 className="margin-auto mt-2 text-center">More Details</h3>
           <Tabs defaultActiveKey="description" className="mb-3">
-            <Tab eventKey="description" title="Description" >
+            <Tab eventKey="description" title="Description">
               {bookDetails?.description}
             </Tab>
             <Tab eventKey="reviews" title="Reviews">
-              <Reviews bookRef={bookDetails?.id}/>
+              <Reviews bookRef={bookDetails?.id} />
             </Tab>
           </Tabs>
         </Col>
