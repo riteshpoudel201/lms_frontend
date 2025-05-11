@@ -1,26 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {} from "redux-persist"
+import {} from "redux-persist";
 
-const initialState ={
-    
-    cartItems: [],
-}
- const bookSlice = createSlice({
-    name:"carts",
-    initialState,
-    reducers:{
-        
-        setCartItems: (state, action)=>{
-            state.cartItems = [...state.cartItems, action.payload]
-        },
+const initialState = {
+  cartItems: [],
+};
+const bookSlice = createSlice({
+  name: "carts",
+  initialState,
+  reducers: {
+    setCartItems: (state, action) => {
+      state.cartItems = [...state.cartItems, action.payload];
+    },
 
-        deleteBookFromCart: (state, action) => {
-            state.cartItems = state.cartItems.filter(cart=> cart?._id !== action.payload)
-        }
-    }
-})
+    deleteBookFromCart: (state, action) => {
+      state.cartItems = state.cartItems.filter(
+        (cart) => cart?._id !== action.payload
+      );
+    },
 
-const { reducer, actions} = bookSlice;
+    clearCart: (state, action) => {
+      state.cartItems = [];
+    //   persisitor.purge();
+    },
+  },
+});
 
-export const { setCartItems ,deleteBookFromCart } = actions;
+const { reducer, actions } = bookSlice;
+
+export const { setCartItems, deleteBookFromCart, clearCart } = actions;
 export default reducer;
