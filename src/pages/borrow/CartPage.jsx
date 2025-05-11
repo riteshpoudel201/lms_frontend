@@ -1,4 +1,5 @@
-import { deleteBookFromCart } from "@features/cart/cartSlice";
+import { borrowNewBookAction } from "@features/borrow/borrowAction";
+import { clearCart, deleteBookFromCart } from "@features/cart/cartSlice";
 import { generateImageUrl } from "@utils/generateUrl";
 import { X } from "lucide-react";
 import { Alert, Button, Container, Row } from "react-bootstrap";
@@ -76,14 +77,26 @@ const CartItem = ({ item, cartItems }) => {
 
 const BorrowListButton = () => {
   const { user } = useSelector((state) => state.userInfo);
+  const {cartItems:cart} = useSelector(state=> state.cartInfo);
+
   const navigate = useNavigate();
-  const handleBurrowClick = () => {
+  const dispatch = useDispatch();
+
+  const handleBurrowClick = async () => {
     const confirmDialog = confirm("Are you sure to borrow this book?");
     if (confirmDialog) {
       //TODO
       //1. Call api to register the borrowed book.
+      const payload = cart?.map(item=> ({
+        book: item._id
+      }))
+      console.log("Payload: ")
+      const response = await dispatch(borrowNewBookAction(payload))
       //2. Clear the cart.
+console.log(response);
+      // dispatch(clearCart())
       //3. Redirect to success or error page.
+      toast.success("Borrow success.")
     }
   };
 
