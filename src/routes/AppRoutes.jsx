@@ -21,6 +21,7 @@ import RequestOtpForm from "@components/forget-password/RequestOtpForm";
 import ResetPasswordForm from "@components/forget-password/ResetPasswordForm";
 import BookListPage from "@pages/books/BookListPage";
 import CartPage from "@pages/borrow/CartPage";
+import ThankYouPage from "@pages/borrow/ThankYouPage";
 
 export const availableRoutes = [
   { path: "/", breadcrumb: "Home" },
@@ -66,6 +67,7 @@ export const routesConfig = [
         ],
       },
       { path: "activate-user", element: <VerifyUser />, breadcrumb: "Verify User" },
+      
       { path: "*", element: <div><h1>404 - Page Not Found</h1></div>, breadcrumb: "404" },
     ],
   },
@@ -81,6 +83,7 @@ export const routesConfig = [
       { path: "edit-book/:id", element: <EditBookPage />, breadcrumb: "Edit Book" },
       { path: "reviews", element: <ReviewsPage />, breadcrumb: "Reviews" },
       { path: "borrow", element: <BorrowPage />, breadcrumb: "Borrow" },
+      { path: "thank-you", element: <ThankYouPage />, breadcrumb: "Thank you" },
     ],
   },
 ];
