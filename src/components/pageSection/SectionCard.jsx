@@ -24,7 +24,7 @@ const SectionCard = ({ imageURL, title, author, year, slug }) => {
             {author?.slice(0, 20) + "..." || "No Author"}-{year || "N/A"}
           </CardText>
         </div>
-        <Link to={ slug}>
+        <Link to={"/book/" + slug}>
           <Button variant="dark" className="w-100">
             View Details
           </Button>
