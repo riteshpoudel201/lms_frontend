@@ -1,4 +1,8 @@
-import { borrowNewBookAction } from "@features/borrow/borrowAction";
+import {
+  borrowNewBookAction,
+  fetchUserBorrowedBookAction,
+} from "@features/borrow/borrowAction";
+import { setRecentBorrow } from "@features/borrow/borrowSlice";
 import { clearCart, deleteBookFromCart } from "@features/cart/cartSlice";
 import { generateImageUrl } from "@utils/generateUrl";
 import { X } from "lucide-react";
@@ -47,7 +51,7 @@ export default CartPage;
 const CartItem = ({ item, cartItems }) => {
   const dispatch = useDispatch();
   const handleRemoveButtonClick = (id) => {
-    toast("Book removed successfully from the cart.")
+    toast("Book removed successfully from the cart.");
     dispatch(deleteBookFromCart(id));
   };
   return (
@@ -66,7 +70,12 @@ const CartItem = ({ item, cartItems }) => {
       </Link>
       <span>Returning: {"2026-01-04"}</span>
       <button
-        style={{ border: "0", outline: "none", background: "none", color:"red" }}
+        style={{
+          border: "0",
+          outline: "none",
+          background: "none",
+          color: "red",
+        }}
         onClick={() => handleRemoveButtonClick(item._id)}
       >
         <X /> Remove
@@ -77,33 +86,40 @@ const CartItem = ({ item, cartItems }) => {
 
 const BorrowListButton = () => {
   const { user } = useSelector((state) => state.userInfo);
-  const {cartItems:cart} = useSelector(state=> state.cartInfo);
+  const { cartItems: cart } = useSelector((state) => state.cartInfo);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleBurrowClick = async () => {
+  const handleBorrowClick = async () => {
     const confirmDialog = confirm("Are you sure to borrow this book?");
     if (confirmDialog) {
       //TODO
       //1. Call api to register the borrowed book.
-      const payload = cart?.map(item=> ({
-        book: item._id
-      }))
-      console.log("Payload: ")
-      const response = await dispatch(borrowNewBookAction(payload))
-      //2. Clear the cart.
-console.log(response);
-      // dispatch(clearCart())
-      //3. Redirect to success or error page.
-      toast.success("Borrow success.")
+      const payload = cart?.map((item) => ({
+        book: item._id,
+      }));
+      const { status, message, data } = await dispatch(
+        borrowNewBookAction(payload)
+      );
+      if (status) {
+        toast[status](message);
+        if (status === "success") {
+          dispatch(setRecentBorrow(data));
+          //2. Clear the cart.
+          dispatch(clearCart());
+
+          //3. Redirect to success or error page.
+          navigate("/user/thank-you")
+        }
+      }
     }
   };
 
   return (
     <>
       {user?._id ? (
-        <Button variant="dark" onClick={handleBurrowClick}>
+        <Button variant="dark" onClick={handleBorrowClick}>
           Proceed to Borrow
         </Button>
       ) : (
