@@ -11,10 +11,11 @@ export const fetchUserBorrowedBookAction = () => async (dispatch) => {
 
 export const borrowNewBookAction = (payload) => async (dispatch) => {
   // call api
-  const { status, data } = await borrowNewBookApi(payload);
+  const { status,message, data } = await borrowNewBookApi(payload);
   //receive book
   // dispatch book to redux store
   status === "success" && data?._id && dispatch(setBorrow(data));
+  return {status, message, data}
 };
 // export const updateBookAction = (payload,id) => async (dispatch) => {
 //   // call api
