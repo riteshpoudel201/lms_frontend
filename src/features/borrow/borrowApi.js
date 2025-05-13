@@ -13,6 +13,16 @@ export const fetchUserBorrowList = async () => {
   return response;
 };
 
+export const fetchAllBorrowList = async () => {
+  const response = await apiProcessor({
+    url: `${apiUrl}/admin`,
+    method: "get",
+    showToast:false,
+    isPrivate: true,
+  });
+  return response;
+};
+
 
 
 export const borrowNewBookApi = async (payload) => {
