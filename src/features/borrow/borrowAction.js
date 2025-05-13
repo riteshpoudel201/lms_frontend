@@ -1,5 +1,5 @@
-import { borrowNewBookApi, fetchUserBorrowList } from "./borrowApi";
-import { setBorrow } from "./borrowSlice";
+import { borrowNewBookApi, fetchAllBorrowList, fetchUserBorrowList } from "./borrowApi";
+import { setAllBorrow, setBorrow } from "./borrowSlice";
 
 
 export const fetchUserBorrowedBookAction = () => async (dispatch) => {
@@ -7,6 +7,12 @@ export const fetchUserBorrowedBookAction = () => async (dispatch) => {
   const { status, data } = await fetchUserBorrowList();
   // dispatch book to redux store
   status === "success" && dispatch(setBorrow(data));
+};
+export const fetchAllBorrowedBookAction = () => async (dispatch) => {
+  // call api
+  const { status, data, message } = await fetchAllBorrowList();
+  // dispatch book to redux store
+  status === "success" ? dispatch(setAllBorrow({data, message})): dispatch(setAllBorrow({message}));
 };
 
 export const borrowNewBookAction = (payload) => async (dispatch) => {
