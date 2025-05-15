@@ -141,9 +141,9 @@ const BookLandingPage = () => {
               toast("Book added to the cart.");
               dispatch(setCartItems(bookDetails));
             }}
-            disabled={isBookInTheCart}
+            disabled={bookDetails?.expectedAvailabilityDate || isBookInTheCart}
           >
-            {isBookInTheCart ? "Already in the cart" : "Add to Borrowing List"}
+            {bookDetails?.expectedAvailabilityDate ? `Will be available at ${bookDetails?.expectedAvailabilityDate.slice(0,10)}` :  isBookInTheCart ? "Already in the cart" : "Add to Borrowing List"}
           </Button>
         </Col>
       </Row>
