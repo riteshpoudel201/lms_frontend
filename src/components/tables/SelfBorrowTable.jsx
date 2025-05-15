@@ -25,6 +25,7 @@ const SelfBorrowTable = () => {
         <BorrowTable
           data={borrow}
           message={borrow.length === 0 && "You haven't borrowed any book."}
+          isAdmin ={ false }
         />
       </div>
     </div>
