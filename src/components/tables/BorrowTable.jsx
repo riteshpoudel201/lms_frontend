@@ -1,11 +1,26 @@
+import { returnBorrowedBookAction } from "@features/borrow/borrowAction";
 import { formatISODate } from "@utils/date";
 import { generateImageUrl } from "@utils/generateUrl";
 import { Button, Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 export const BorrowTable = ({ data, message, isAdmin }) => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const handleBookReturn = ({ book }) => {
+    const alertMessage = "Are you sure to return this book?";
+    if (confirm(alertMessage)) {
+      const completeBorrow = dispatch(returnBorrowedBookAction(book));
+
+      toast[completeBorrow.status](completeBorrow.message);
+    } else {
+      toast.error("Unable to return sir.");
+    }
+  };
   return (
     <Table striped bordered hover>
       <thead className="table-dark">
@@ -39,7 +54,11 @@ export const BorrowTable = ({ data, message, isAdmin }) => {
                   }
                 />
               </td>
-              <td title={borrow?.book?.title} onClick={()=> navigate(`/book/${borrow?.book?.slug}`)} style={{cursor:"pointer", textDecoration:"underline"}}>
+              <td
+                title={borrow?.book?.title}
+                onClick={() => navigate(`/book/${borrow?.book?.slug}`)}
+                style={{ cursor: "pointer", textDecoration: "underline" }}
+              >
                 {borrow?.book?.title?.slice(0, 20)}...
               </td>
               <td>{borrow?.userId}</td>
@@ -49,11 +68,9 @@ export const BorrowTable = ({ data, message, isAdmin }) => {
                 <td>
                   <div className="d-flex flex-row gap-1">
                     {!borrow?.isReturned && (
-                      <Link to={`/user/book/return/${borrow?._id}`}>
-                        <Button variant="warning">
-                           Return Book{" "}
-                        </Button>
-                      </Link>
+                      <Button variant="warning" onClick={handleBookReturn}>
+                        Return Book{" "}
+                      </Button>
                     )}
                     {borrow?.isReturned && !borrow?.reviewId && (
                       <Link to={`/user/book/review/${borrow?.book?._id}`}>
@@ -64,7 +81,7 @@ export const BorrowTable = ({ data, message, isAdmin }) => {
                           Review
                         </Button>
                       </Link>
-                    ) }
+                    )}
 
                     {borrow?.reviewId && "Reviewed"}
                   </div>
