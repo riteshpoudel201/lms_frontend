@@ -35,6 +35,16 @@ export const borrowNewBookApi = async (payload) => {
   });
   return response;
 };
+export const returnBorrowedBookApi = async (payload) => {
+  const response = await apiProcessor({
+    url: `${apiUrl}/`,
+    method: "patch",
+    showToast:false,
+    isPrivate: true,
+    data: payload
+  });
+  return response;
+};
 // export const updateBookApi = async (id,payload) => {
 //   const response = await apiProcessor({
 //     url: `${apiUrl}/${id}`,
