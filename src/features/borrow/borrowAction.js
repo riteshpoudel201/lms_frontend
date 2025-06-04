@@ -1,4 +1,4 @@
-import { borrowNewBookApi, fetchAllBorrowList, fetchUserBorrowList } from "./borrowApi";
+import { borrowNewBookApi, fetchAllBorrowList, fetchUserBorrowList, returnBorrowedBookApi } from "./borrowApi";
 import { setAllBorrow, setBorrow } from "./borrowSlice";
 
 
@@ -22,6 +22,13 @@ export const borrowNewBookAction = (payload) => async (dispatch) => {
   // dispatch book to redux store
   status === "success" && data?._id && dispatch(setBorrow(data));
   return {status, message, data}
+};
+export const returnBorrowedBookAction = (payload) => async (dispatch) => {
+  // call api
+  const { status,message } = await returnBorrowedBookApi(payload);
+  //receive book
+  // dispatch book to redux store
+  return {status, message}
 };
 // export const updateBookAction = (payload,id) => async (dispatch) => {
 //   // call api
