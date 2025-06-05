@@ -11,12 +11,18 @@ export const BorrowTable = ({ data, message, isAdmin }) => {
 
   const dispatch = useDispatch();
 
-  const handleBookReturn = ({ book }) => {
+  const handleBookReturn = (book) => {
     const alertMessage = "Are you sure to return this book?";
     if (confirm(alertMessage)) {
-      const completeBorrow = dispatch(returnBorrowedBookAction(book));
-
-      toast[completeBorrow.status](completeBorrow.message);
+      try {
+        console.log("Book to be returned: ", book)
+        const { status, message } = dispatch(returnBorrowedBookAction(book));
+        if (status) {
+          toast[status](message);
+        }
+      } catch (error) {
+        console.log("Error: ", error);
+      }
     } else {
       toast.error("Unable to return sir.");
     }
@@ -68,7 +74,7 @@ export const BorrowTable = ({ data, message, isAdmin }) => {
                 <td>
                   <div className="d-flex flex-row gap-1">
                     {!borrow?.isReturned && (
-                      <Button variant="warning" onClick={handleBookReturn}>
+                      <Button variant="warning" onClick={()=> handleBookReturn(borrow)}>
                         Return Book{" "}
                       </Button>
                     )}

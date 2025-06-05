@@ -10,6 +10,7 @@ const SelfBorrowTable = () => {
   useEffect(() => {
     dispatch(fetchUserBorrowedBookAction());
   }, [dispatch]);
+  console.log("Borrow: ", borrow)
   return (
     <div className="mt-4">
       <div className="d-flex flex-row justify-content-between px-4">
